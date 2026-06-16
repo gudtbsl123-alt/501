@@ -22,7 +22,7 @@
             color: #333; 
             font-size: 22px; 
             line-height: 1.6;
-            word-break: keep-all; /* 단어 단위 줄바꿈 유지 */
+            word-break: keep-all;
             user-select: none;
         }
 
@@ -186,7 +186,6 @@
             line-height: 1.3;
         }
         
-        /* 다짐 및 격려 텍스트 모바일 레이아웃 최적화 블록 */
         .msg-text { 
             font-size: 22px; 
             line-height: 1.5; 
@@ -238,7 +237,6 @@
         .loading-text { font-weight: bold; color: #ff6b81; margin-top: 15px; font-size: 22px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-        /* 📱 스마트폰 화면 최적화 (가시성 및 스크롤 문제 해결) */
         @media (max-width: 480px) {
             body { font-size: 16px; }
             h2 { font-size: 26px; } 
@@ -248,9 +246,8 @@
             
             .emotion-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 25px 0; }
             .emotion-icon { font-size: 45px; }
-            .btn-primary { font-size: 20px; padding: 16px 36px; width: 100%; } /* 버튼 꽉 차게 */
+            .btn-primary { font-size: 20px; padding: 16px 36px; width: 100%; }
 
-            /* 결과창 레이아웃 대폭 축소 및 꽉 차게 */
             #result-screen { padding: 25px 15px; }
             .message-box { padding: 30px 20px; }
             .message-box h2 { font-size: 24px; margin-bottom: 15px; }
@@ -260,7 +257,6 @@
             .msg-content { font-size: 20px; }
             .msg-cheer { font-size: 17px; margin-bottom: 25px; }
             
-            /* 교사 화면 모바일 처리 */
             #teacher-login-section, #teacher-dashboard { padding: 30px 15px; }
             .tab-btn { font-size: 16px; padding: 10px 15px; }
             th, td { font-size: 14px; padding: 10px; }
@@ -346,7 +342,7 @@
     </div>
 
     <script>
-        // 🚨 구글 시트 URL (선생님 링크 그대로 유지됨)
+        // 🚨 구글 시트 URL
         const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyLgq03A7UKTNbfukGxGJq0NK_Z-jyxdNwrKGIRhRvLvqErIzQoclc2TPbJYx4GrFRkOg/exec';
 
         const defaultEmotions = [
@@ -396,9 +392,16 @@
             if (!currentSelectedEmotion) return alert('지금 감정을 하나 선택해 주세요! 🎨');
             if (!resolution) return alert('오늘의 멋진 다짐을 한 줄 적어주세요! 🎯');
 
+            // 🚨 [핵심 수정 부분] 스마트폰의 로컬(한국) 시간으로 정확하게 YYYY-MM-DD 추출
             const now = new Date();
-            const dateStr = now.toISOString().split('T')[0];
-            const timeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`; // 정확한 현지 날짜
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const timeStr = `${hours}:${minutes}`; // 정확한 현지 시간
 
             const payload = {
                 date: dateStr, time: timeStr, name: name, emotionName: currentSelectedEmotion.name,
@@ -606,13 +609,11 @@
             resultScreen.classList.remove('hidden');
             resultScreen.style.backgroundColor = record.emotionColor;
             
-            // 이름 제목 크기 조정 및 줄바꿈 최적화
             document.getElementById('result-emotion-title').innerHTML = `✨ <b>${record.name}</b> 학생 반가워요! ✨`;
             
             const emotionMessages = teacherMessages[record.emotionName] || ["오늘 하루도 힘내서 멋지게 보내봐요!"];
             const randomTeacherMessage = emotionMessages[Math.floor(Math.random() * emotionMessages.length)];
 
-            // <br><br> 로 띄우던 간격을 없애고, <div> 클래스로 나눠서 스마트폰에 맞게 구조화
             let finalMsg = `
                 <div class="msg-text">${randomTeacherMessage}</div>
                 <div class="msg-resolution">
