@@ -22,7 +22,7 @@
             color: #333; 
             font-size: 22px; 
             line-height: 1.6;
-            word-break: keep-all;
+            word-break: keep-all; /* 단어 단위 줄바꿈 유지 */
             user-select: none;
         }
 
@@ -157,12 +157,12 @@
         }
         .btn-primary:disabled { background: #cccccc; cursor: not-allowed; }
         
+        /* 결과 화면 최적화 */
         #result-screen { 
-            padding: 60px 20px; 
+            padding: 50px 20px; 
             border-radius: 30px; 
             color: #333; 
             transition: background-color 0.8s ease; 
-            min-height: 450px; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
@@ -171,15 +171,52 @@
             box-shadow: inset 0 0 50px rgba(255,255,255,0.2), 0 15px 35px rgba(0,0,0,0.1);
         }
         .message-box { 
-            background: rgba(255, 255, 255, 0.92); 
-            padding: 45px 35px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 40px 30px; 
             border-radius: 25px; 
-            width: 90%; max-width: 600px; 
+            width: 100%; 
+            max-width: 550px; 
             box-shadow: 0 15px 30px rgba(0,0,0,0.08); 
             text-align: center;
         }
-        .message-box h2 { font-size: 34px; color: #222; margin-bottom: 20px; }
-        .message-box p { font-size: 24px; line-height: 1.7; color: #444; }
+        .message-box h2 { 
+            font-size: 32px; 
+            color: #222; 
+            margin-bottom: 25px; 
+            line-height: 1.3;
+        }
+        
+        /* 다짐 및 격려 텍스트 모바일 레이아웃 최적화 블록 */
+        .msg-text { 
+            font-size: 22px; 
+            line-height: 1.5; 
+            color: #444; 
+            margin-bottom: 25px; 
+        }
+        .msg-resolution { 
+            background: rgba(255, 107, 129, 0.08); 
+            border-radius: 15px; 
+            padding: 20px; 
+            margin-bottom: 25px; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.03);
+        }
+        .msg-label { 
+            font-size: 16px; 
+            color: #ff6b81; 
+            font-weight: bold; 
+            margin-bottom: 8px; 
+        }
+        .msg-content { 
+            font-size: 24px; 
+            font-weight: bold; 
+            color: #333; 
+        }
+        .msg-cheer { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: #ff6b81; 
+            margin-bottom: 30px;
+        }
 
         #teacher-login-section, #teacher-dashboard {
             background: rgba(255, 255, 255, 0.85); padding: 50px 30px; border-radius: 30px; 
@@ -201,13 +238,32 @@
         .loading-text { font-weight: bold; color: #ff6b81; margin-top: 15px; font-size: 22px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
-        @media (max-width: 430px) {
-            body { font-size: 18px; }
-            h2 { font-size: 28px; } h3 { font-size: 22px; }
-            input[type="text"], input[type="password"], button { font-size: 20px; padding: 14px; }
-            .emotion-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .emotion-icon { font-size: 48px; }
-            .btn-primary { font-size: 20px; padding: 16px 36px; }
+        /* 📱 스마트폰 화면 최적화 (가시성 및 스크롤 문제 해결) */
+        @media (max-width: 480px) {
+            body { font-size: 16px; }
+            h2 { font-size: 26px; } 
+            h3 { font-size: 20px; }
+            .container { padding: 15px 10px; }
+            input[type="text"], input[type="password"], button { font-size: 18px; padding: 14px; }
+            
+            .emotion-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 25px 0; }
+            .emotion-icon { font-size: 45px; }
+            .btn-primary { font-size: 20px; padding: 16px 36px; width: 100%; } /* 버튼 꽉 차게 */
+
+            /* 결과창 레이아웃 대폭 축소 및 꽉 차게 */
+            #result-screen { padding: 25px 15px; }
+            .message-box { padding: 30px 20px; }
+            .message-box h2 { font-size: 24px; margin-bottom: 15px; }
+            .msg-text { font-size: 18px; margin-bottom: 15px; line-height: 1.4; }
+            .msg-resolution { padding: 15px; margin-bottom: 15px; }
+            .msg-label { font-size: 14px; margin-bottom: 5px; }
+            .msg-content { font-size: 20px; }
+            .msg-cheer { font-size: 17px; margin-bottom: 25px; }
+            
+            /* 교사 화면 모바일 처리 */
+            #teacher-login-section, #teacher-dashboard { padding: 30px 15px; }
+            .tab-btn { font-size: 16px; padding: 10px 15px; }
+            th, td { font-size: 14px; padding: 10px; }
         }
     </style>
 </head>
@@ -219,7 +275,6 @@
     </div>
 
     <div class="container">
-        <!-- 학생용 화면 -->
         <div id="student-section">
             <div id="checkin-screen">
                 <h2>✨ 오늘 아침, 내 마음은 어떨까? ✨</h2>
@@ -240,14 +295,12 @@
             <div id="result-screen" class="hidden">
                 <div class="message-box">
                     <h2 id="result-emotion-title"></h2>
-                    <p id="result-message"></p>
-                    <br>
+                    <div id="result-message"></div>
                     <button class="btn-primary" onclick="resetStudentScreen()">처음으로 돌아가기 🏠</button>
                 </div>
             </div>
         </div>
 
-        <!-- 교사 로그인 화면 -->
         <div id="teacher-login-section" class="hidden">
             <div style="text-align: center;">
                 <h2>👩‍🏫 교사용 비밀번호 확인</h2>
@@ -258,7 +311,6 @@
             </div>
         </div>
 
-        <!-- 교사 대시보드 화면 -->
         <div id="teacher-dashboard" class="hidden">
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('records')">📊 실시간 감정 기록표</button>
@@ -294,7 +346,7 @@
     </div>
 
     <script>
-        // 🚨 여기에 구글 웹 앱 URL을 꼭 넣어주세요!
+        // 🚨 구글 시트 URL (선생님 링크 그대로 유지됨)
         const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyLgq03A7UKTNbfukGxGJq0NK_Z-jyxdNwrKGIRhRvLvqErIzQoclc2TPbJYx4GrFRkOg/exec';
 
         const defaultEmotions = [
@@ -369,9 +421,6 @@
             });
         }
 
-        // ================================================================
-        // 교사의 따뜻한 랜덤 격려 메시지 데이터 (감정당 20개씩, 총 160개)
-        // ================================================================
         const teacherMessages = {
             '기쁨': [
                 "오늘 아침 기쁨으로 가득 찬 모습을 보니 선생님도 정말 행복해져요!",
@@ -557,18 +606,20 @@
             resultScreen.classList.remove('hidden');
             resultScreen.style.backgroundColor = record.emotionColor;
             
-            document.getElementById('result-emotion-title').innerText = `✨ ${record.name} 학생 반가워요! ✨`;
+            // 이름 제목 크기 조정 및 줄바꿈 최적화
+            document.getElementById('result-emotion-title').innerHTML = `✨ <b>${record.name}</b> 학생 반가워요! ✨`;
             
-            // 해당 감정의 20개 메시지 중 하나를 무작위로 선택
             const emotionMessages = teacherMessages[record.emotionName] || ["오늘 하루도 힘내서 멋지게 보내봐요!"];
             const randomTeacherMessage = emotionMessages[Math.floor(Math.random() * emotionMessages.length)];
 
-            // 최종 출력 문구 구성
+            // <br><br> 로 띄우던 간격을 없애고, <div> 클래스로 나눠서 스마트폰에 맞게 구조화
             let finalMsg = `
-                ${randomTeacherMessage}<br><br>
-                ⭐ <b>내가 적은 다짐</b><br>
-                "${record.resolution}"<br><br>
-                선생님이 온 마음을 다해 너의 성장을 응원할게! 화이팅! 🍀
+                <div class="msg-text">${randomTeacherMessage}</div>
+                <div class="msg-resolution">
+                    <div class="msg-label">⭐ 내가 적은 다짐</div>
+                    <div class="msg-content">"${record.resolution}"</div>
+                </div>
+                <div class="msg-cheer">선생님이 언제나 널 곁에서 응원할게! 화이팅! 🍀</div>
             `;
             
             document.getElementById('result-message').innerHTML = finalMsg;
